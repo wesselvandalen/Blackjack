@@ -1,0 +1,23 @@
+# Running "docker-compose up" (active process)
+# or "docker-compose start" (background process)
+# will setup our development database
+#
+# One can connect to it using your DB client
+# using the following parameters (see: application.properties):
+#   url = jdbc:postgresql://localhost:15432/admin
+#   username = admin
+#   password = admin
+version: "3.7"
+services:
+  db:
+    build: development/db
+    ports:
+      - "15432:5432"
+    environment:
+      - POSTGRES_USER=admin
+      - POSTGRES_PASSWORD=admin
+      - DB_APP_NAME=admin
+      - DB_APP_USER=admin
+      - DB_APP_PASS=admin
+    volumes:
+      - "./data:/var/data/db"
