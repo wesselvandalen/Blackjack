@@ -8,7 +8,7 @@ import nl.hu.bep2.casino.blackjack.domain.exception.NoObjectFoundException;
 import nl.hu.bep2.casino.blackjack.domain.game.Game;
 import nl.hu.bep2.casino.blackjack.domain.game.Move;
 import nl.hu.bep2.casino.blackjack.domain.speler.AdminDecorator;
-import nl.hu.bep2.casino.blackjack.domain.speler.Speler;
+import nl.hu.bep2.casino.blackjack.domain.speler.Player;
 import nl.hu.bep2.casino.blackjack.domain.speler.SpelerAuthorizatieService;
 import nl.hu.bep2.casino.chips.application.ChipsService;
 import org.springframework.stereotype.Service;
@@ -31,47 +31,47 @@ public class BlackJackService {
 
     public Game startGame(String playerName, double bet){
         chipsService.withdrawChips(playerName, (long) bet);
-        Speler speler = new Speler(playerName, bet);
-        Game game = new Game(PLAYING, speler);
+        Player player = new Player(playerName, bet);
+        Game game = new Game(PLAYING, player);
         game.start();
         blackJackRepository.save(game);
-        if (game.gameIsGeeindigd()) {
-            double verkregenBet = game.getAantalVerkregenGeld();
-            chipsService.depositChips(playerName, (long) verkregenBet);
+        if (game.gameIsOver()) {
+            double receivedBet = game.getReceivedMoney();
+            chipsService.depositChips(playerName, (long) receivedBet);
         }
         return game;
     }
 
     public Game selectMove(Move move, long gameID) {
-        Optional<Game> gevondenGame = blackJackRepository.findById(gameID);
-        if (gevondenGame.isPresent()) {
-            Game game = gevondenGame.get();
+        Optional<Game> foundGame = blackJackRepository.findById(gameID);
+        if (foundGame.isPresent()) {
+            Game game = foundGame.get();
             game.selectMove(move);
             return game;
         }
-        throw new NoObjectFoundException("Er is geen game-object gevonden met game-id: " + gameID);
+        throw new NoObjectFoundException("Ingen spill ble funnet med id : " + gameID);
     }
 
     public Game getGameResults(long gameID) {
-        Optional<Game> gevondenGame = blackJackRepository.findById(gameID);
-        if (gevondenGame.isPresent()) {
-            return gevondenGame.get();
+        Optional<Game> foundGame = blackJackRepository.findById(gameID);
+        if (foundGame.isPresent()) {
+            return foundGame.get();
         }
-        throw new NoObjectFoundException("Er is geen game-object gevonden met game-id: " + gameID);
+        throw new NoObjectFoundException("Ingen spill ble funnet med id : " + gameID);
     }
 
     public Game removeCard(long gameID, CardRank cardRank, CardSuit cardSuit) {
-        Optional<Game> gevondenGame = blackJackRepository.findById(gameID);
-        if (gevondenGame.isPresent()) {
-            Game game = gevondenGame.get();
-            Speler speler = game.getSpeler();
-            if (SpelerAuthorizatieService.isAdmin(speler)) {
-                AdminDecorator adminSpeler = new AdminDecorator(speler);
+        Optional<Game> foundGame = blackJackRepository.findById(gameID);
+        if (foundGame.isPresent()) {
+            Game game = foundGame.get();
+            Player player = game.getSpeler();
+            if (SpelerAuthorizatieService.isAdmin(player)) {
+                AdminDecorator adminSpeler = new AdminDecorator(player);
                 adminSpeler.removeCard(cardSuit, cardRank);
             }
             return game;
         }
-        throw new NoObjectFoundException("Er is geen game-object gevonden met game-id: " + gameID);
+        throw new NoObjectFoundException("Ingen spill ble funnet med id : " + gameID);
     }
 
     public void deleteAll() {

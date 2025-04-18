@@ -8,9 +8,9 @@ import nl.hu.bep2.casino.blackjack.domain.cards.Card;
 import java.util.ArrayList;
 
 @Entity
-public class Speler implements SpelerInterface {
+public class Player implements PlayerInterface {
 
-    private String naam;
+    private String name;
     private double bet;
     @OneToOne(cascade = CascadeType.ALL)
     private Hand hand = new Hand();
@@ -18,12 +18,12 @@ public class Speler implements SpelerInterface {
     @GeneratedValue
     private Long id;
 
-    public Speler(String naam, double bet) {
-        this.naam = naam;
+    public Player(String naam, double bet) {
+        this.name = naam;
         this.bet = bet;
     }
 
-    public Speler() {}
+    public Player() {}
 
     @Override
     public void addCard(Card card) {
@@ -38,16 +38,16 @@ public class Speler implements SpelerInterface {
 
     @Override
     public void doubleDown(Deck deck) {
-        verdubbelBet();
+        doubleBet();
         hit(deck);
     }
 
-    public void verdubbelBet() {
+    public void doubleBet() {
         this.bet *= 2;
     }
 
     public ArrayList<Card> showCards() {
-        return this.hand.getKaarten();
+        return this.hand.getCards();
     }
 
     public int returnHandValue() {
@@ -62,7 +62,7 @@ public class Speler implements SpelerInterface {
         return this.hand;
     }
 
-    public String getNaam() {
-        return this.naam;
+    public String getName() {
+        return this.name;
     }
 }

@@ -10,48 +10,48 @@ import nl.hu.bep2.casino.blackjack.domain.exception.NoObjectFoundException;
 
 import java.util.List;
 
-public class AdminDecorator implements SpelerInterface {
+public class AdminDecorator implements PlayerInterface {
 
-    private Speler speler;
+    private Player player;
 
-    public AdminDecorator(Speler speler) {
-        this.speler = speler;
+    public AdminDecorator(Player player) {
+        this.player = player;
     }
 
     public void removeCard(CardSuit cs, CardRank cr) {
-        List<Card> alleKaartenVanSpeler = speler.showCards();
-        boolean kaartGevonden = false;
+        List<Card> allPlayerCards = player.showCards();
+        boolean foundCard = false;
 
-        if (alleKaartenVanSpeler.size() == 1) {
-            throw new CardListException("De speelkaartenlijst bevat nog maar één kaart. U kunt daarom geen kaart verwijderen. HINT: Pak eerst een kaart voordat u kaarten wil wegdoen!");
+        if (allPlayerCards.size() == 1) { 
+            throw new CardListException("Du kan ikke fjerne et kort, fordi det er bare ett kort igjen. Ta ett kort først.");
         }
 
-        for (Card card : alleKaartenVanSpeler) {
+        for (Card card : allPlayerCards) {
             if (card.getCardSuit().equals(cs) && card.getCardRank().equals(cr)) {
-                kaartGevonden = true;
-                speler.getHand().removeCard(card);
+                foundCard = true;
+                player.getHand().removeCard(card);
             }
         }
 
-        if (!kaartGevonden) {
-            throw new NoObjectFoundException("Er is geen kaart gevonden met CardSuit: " + cs + " en CardRank: " + cr);
+        if (!foundCard) {
+            throw new NoObjectFoundException("Det er ikke blitt funnet et kort med CardSuit: " + cs + " og CardRank: " + cr);
         }
     }
 
     @Override
     public void addCard(Card card) {
-        this.speler.getHand().addCard(card);
+        this.player.getHand().addCard(card);
     }
 
     @Override
     public Hand hit(Deck deck){
-        this.speler.getHand().addCard(deck.drawRandomCard());
-        return this.speler.getHand();
+        this.player.getHand().addCard(deck.drawRandomCard());
+        return this.player.getHand();
     }
 
     @Override
     public void doubleDown(Deck deck) {
-        this.speler.verdubbelBet();
+        this.player.doubleBet();
         hit(deck);
     }
 }

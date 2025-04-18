@@ -3,7 +3,7 @@ import jakarta.persistence.*;
 import nl.hu.bep2.casino.blackjack.domain.cards.Card;
 import nl.hu.bep2.casino.blackjack.domain.deck.Deck;
 import nl.hu.bep2.casino.blackjack.domain.deck.DeckFactorySingleton;
-import nl.hu.bep2.casino.blackjack.domain.speler.Speler;
+import nl.hu.bep2.casino.blackjack.domain.speler.Player;
 import static jakarta.persistence.CascadeType.ALL;
 
 @Entity
@@ -24,10 +24,10 @@ public class Dealer {
         return deck;
     }
 
-    // deal de kaarten uit
-    public void dealCards(Speler speler){
-        speler.addCard(deck.drawRandomCard());
-        speler.addCard(deck.drawRandomCard());
+    // Del ut kortene
+    public void dealCards(Player player){
+        player.addCard(deck.drawRandomCard());
+        player.addCard(deck.drawRandomCard());
 
         Card randomCard = deck.drawRandomCard();
         randomCard.changeCardVisibility(false);
@@ -35,8 +35,7 @@ public class Dealer {
         hand.addCard(randomCard);
     }
 
-    // als het spel is geindigd krijgt de dealer extra kaarten tot de totale hand waarde
-    // van de dealer >= 17 is.
+    // Hvis spillet er over, får dealeren ekstra kort frem til totalverdien til dealeren er >= 17.
     public void finalCards() {
         while (hand.fetchTotalHandValue() < 17) {
             if (hand.fetchTotalHandValue() >= 17) {
@@ -53,7 +52,7 @@ public class Dealer {
         return hand;
     }
 
-    // draait alle kaarten hun waardes naar boven
+    // Snur alle kort.
     public void trueAllCards() {
         this.hand.trueAllCards();
     }

@@ -7,10 +7,4 @@ public class StandardDeckFactory implements DeckFactory {
         return new Deck();
     }
 
-    // Voorbeeld van evt. andere Deck implementatie
-    /*
-    public OnlyHeartsDeck createOnlyHeartsDeck() {
-        return new OnlyHeartsDeck();
-    }
-     */
 }

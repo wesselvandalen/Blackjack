@@ -26,7 +26,7 @@ public class Card {
         }
     }
 
-    // draait een kaart om
+    // snur et kort
     public boolean changeCardVisibility(boolean visibility) {
         cardIsVisible = visibility;
         return cardIsVisible;
@@ -48,7 +48,7 @@ public class Card {
         return ACERank;
     }
 
-    // veranderd de waarde van een ACE kaart van 11 naar 1 (of andersom)
+    // endrer verdien på at ACE kort fra 1 til 11 (eller omvendt)
     public void switchACEValue() {
         if (cardRank == ACE) {
             if (ACERank == 11) {

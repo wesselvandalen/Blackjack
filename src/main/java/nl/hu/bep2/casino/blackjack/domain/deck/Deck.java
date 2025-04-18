@@ -39,7 +39,7 @@ public class Deck implements Serializable {
     }
 
     public Card drawRandomCard(){
-        if (allCards.isEmpty()) { fillDeck(); } // ?
+        if (allCards.isEmpty()) { fillDeck(); }
 
         int randomIndex = random.nextInt(allCards.size());
         Card randomCard = allCards.get(randomIndex);

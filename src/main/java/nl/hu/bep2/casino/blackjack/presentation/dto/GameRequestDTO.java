@@ -3,9 +3,6 @@ package nl.hu.bep2.casino.blackjack.presentation.dto;
 import nl.hu.bep2.casino.blackjack.domain.cards.CardRank;
 import nl.hu.bep2.casino.blackjack.domain.cards.CardSuit;
 
-/**
- * Een Data Transfer Object om alle gegevens uit de JSON's in Postman te 'ontcijferen' en te gebruiken in code.
- */
 public class GameRequestDTO {
 
     private double bet;

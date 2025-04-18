@@ -12,7 +12,7 @@ public class Hand {
 
     @Convert(converter = JPAAttributeConverter.class)
     @Column(length = 2000)
-    private ArrayList<Card> kaarten = new ArrayList<>();
+    private ArrayList<Card> cards = new ArrayList<>();
     private int handValue;
     @Id
     @GeneratedValue
@@ -33,20 +33,20 @@ public class Hand {
     }
 
     public void updateHandValue() {
-        int totaleHandValue = 0;
-        for (Card card : kaarten) {
+        int totalHandValue = 0;
+        for (Card card : cards) {
             if (card.getCardRank() == ACE) {
-                totaleHandValue += card.fetchACERank();
+                totalHandValue += card.fetchACERank();
             } else {
-                totaleHandValue += card.fetchCardRankValue();
+                totalHandValue += card.fetchCardRankValue();
             }
         }
-        this.handValue = totaleHandValue;
+        this.handValue = totalHandValue;
     }
 
     public ArrayList<Card> showVisibleCards(){
         ArrayList<Card> cards = new ArrayList<>();
-        for (Card card : kaarten) {
+        for (Card card : cards) {
             if (card.retrieveCardVisibility()) {
                 cards.add(card);
             }
@@ -55,18 +55,18 @@ public class Hand {
     }
 
     public void removeCard(Card card) {
-        kaarten.remove(card);
+        cards.remove(card);
     }
 
     public void addCard(Card card){
-        kaarten.add(card);
+        cards.add(card);
         updateHandValue();
     }
 
     public int getVisibleHandValue() {
         int visibleHandValue = 0;
 
-        for (Card card : getKaarten()) {
+        for (Card card : getCards()) {
             if (card.retrieveCardVisibility()) {
                 if (card.getCardRank() == ACE) {
                     visibleHandValue += card.fetchACERank();
@@ -80,7 +80,7 @@ public class Hand {
 
     public int fetchTotalHandValue(){
         int totalValue = 0;
-        for (Card card : kaarten) {
+        for (Card card : cards) {
             if (card.getCardRank() == ACE) {
                 totalValue += card.fetchACERank();
             } else {
@@ -100,29 +100,29 @@ public class Hand {
     }
 
     public ArrayList<Card> returnACECard(){
-        ArrayList<Card> alleACEKaarten = new ArrayList<>();
+        ArrayList<Card> allACECards = new ArrayList<>();
         boolean containsACE = false;
 
         for (Card card : showVisibleCards()) {
             if (card.getCardRank() == ACE) {
-                alleACEKaarten.add(card);
+                allACECards.add(card);
                 containsACE = true;
             }
         }
 
         if (containsACE) {
-            return alleACEKaarten;
+            return allACECards;
         }
-        throw new WrongCardValueException("Spelerhand bevat geen ACE kaart.");
+        throw new WrongCardValueException("Spillerhånd inneholder ikke noe ACE kort.");
     }
 
     public void trueAllCards() {
-        for (Card card : kaarten) {
+        for (Card card : cards) {
             card.changeCardVisibility(true);
         }
     }
 
-    public ArrayList<Card> getKaarten() {
+    public ArrayList<Card> getCards() {
         return showVisibleCards();
     }
 }
